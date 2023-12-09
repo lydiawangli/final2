@@ -1,4 +1,4 @@
-# Final Project: Impact of COVID-19 Across Demographics https://uscbiostats.github.io/PM566/assignment/14-final/
+# Final Project: Impact of COVID-19 Across Demographics https://lydiawangli.github.io/final2/download.html
 
 # Download final report as PDF: https://github.com/lydiawangli/Final/blob/main/PM566%20Final%20Report.pdf
 
