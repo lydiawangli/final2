@@ -1,0 +1,87 @@
+---
+title: "Data Analysis & Insights"
+format: html
+---
+
+In this section, we dive into the specifics of our data analysis process, exploring how various underlying health conditions have contributed to COVID-19 deaths. Our approach is grounded in rigorous data examination and aims to provide a comprehensive understanding of the pandemic's impact through the lens of existing health conditions.
+
+The dataset used for this analysis was obtained from Data.gov, published by the Centers for Disease Control and Prevention (CDC). It comprises 621,000 rows and 14 columns, offering detailed insights into various aspects of COVID-19 related fatalities. After an initial assessment, we found approximately 5.1% missing values, predominantly in the 'Year', 'Month', and 'Flag' columns. To ensure the integrity of our analysis, rows with missing values were omitted. We then focused on the most relevant variables for our study, filtering the dataset to include records specifically related to COVID-19 deaths. Tools from the `data.table` and `dplyr` packages in R were utilized for data manipulation, including removing duplicates, selecting specific columns, and filtering rows.
+
+
+```{r, echo=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+file_path <- "/Users/LydiaWangLi/Desktop/PM566R/covid19.csv"
+dat <- read.csv(file_path)
+
+# Ensure there are no duplicate rows
+dat <- unique(dat)
+
+# Remove rows with any NA values
+dat <- na.omit(dat)
+
+# Select only the necessary columns
+dat <- dat %>%
+  select(Condition, COVID.19.Deaths, Age.Group)
+
+# Replace NA values in COVID.19.Deaths with 0
+dat <- dat %>% mutate(COVID.19.Deaths = coalesce(COVID.19.Deaths, 0))
+
+# Filter out unwanted Conditions and Age Groups
+filtered_dat <- dat %>%
+  filter(Condition != "COVID-19", 
+         COVID.19.Deaths > 0,
+         Age.Group != "All Ages",
+         Age.Group != "Not stated")
+
+# Create a bar plot for Influenza and Pneumonia deaths by Age Group
+ggplot(subset(filtered_dat, Condition == "Influenza and pneumonia"), aes(x = `Age.Group`, y = COVID.19.Deaths)) +
+  geom_bar(stat = "identity", fill = "coral") +
+  labs(title = "Impact of Influenza and Pneumonia on COVID-19 Deaths by Age Group",
+       x = "Age Group",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+```{r, echo=FALSE}
+ggplot(subset(filtered_dat, Condition == "Diabetes"), aes(x = `Age.Group`, y = COVID.19.Deaths)) +
+  geom_bar(stat = "identity", fill = "coral") +
+  labs(title = "Impact of Diabetes on COVID-19 Deaths by Age Group",
+       x = "Age Group",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r, echo=FALSE}
+ggplot(subset(filtered_dat, Condition == "Cardiac arrest"), aes(x = `Age.Group`, y = COVID.19.Deaths)) +
+  geom_bar(stat = "identity", fill = "coral") +
+  labs(title = "Impact of Cardiac arrest on COVID-19 Deaths by Age Group",
+       x = "Age Group",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r, echo=FALSE}
+ggplot(subset(filtered_dat, Condition == "Hypertensive diseases"), aes(x = `Age.Group`, y = COVID.19.Deaths)) +
+  geom_bar(stat = "identity", fill = "coral") +
+  labs(title = "Impact of Hypertensive diseases on COVID-19 Deaths by Age Group",
+       x = "Age Group",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r, echo=FALSE}
+ggplot(subset(filtered_dat, Condition == "Respiratory failure"), aes(x = `Age.Group`, y = COVID.19.Deaths)) +
+  geom_bar(stat = "identity", fill = "coral") +
+  labs(title = "Impact of Respiratory failure on COVID-19 Deaths by Age Group",
+       x = "Age Group",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+

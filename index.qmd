@@ -1,0 +1,225 @@
+---
+title: "Home"
+format: html
+---
+
+In this project, we delve into the multifaceted impacts of the COVID-19 pandemic, focusing on how it has affected various demographics and uncovering the underlying conditions that significantly contributed to COVID-19 related deaths. Our objective is to provide a comprehensive analysis of the data collected during the pandemic, shedding light on crucial trends and patterns that emerged. This analysis is not only vital for understanding the past and present implications of the pandemic but also for preparing and strategizing for future public health challenges.
+
+Through rigorous data exploration, we aim to answer key questions such as which age groups were most affected and which pre-existing health conditions posed higher risks. Our analysis leverages a dataset that includes detailed information on COVID-19 deaths, underlying health conditions, and demographic data.
+
+
+```{r, echo=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+file_path <- "/Users/LydiaWangLi/Desktop/PM566R/covid19.csv"
+dat <- read.csv(file_path)
+
+mean(is.na(dat))
+
+dat <- unique(dat)
+
+dim(dat)
+
+dat <- na.omit(dat)
+
+dat <- dat %>%
+  select(Condition, COVID.19.Deaths, Age.Group, State)
+
+dat <- dat %>% mutate(COVID.19.Deaths = coalesce(COVID.19.Deaths, 0))
+
+filtered_dat <- dat %>%
+  filter(Condition != "COVID-19", Condition != "All other conditions and causes (residual)")
+
+dim(filtered_dat)
+
+top_conditions <- filtered_dat %>%
+  group_by(Condition) %>%
+  summarise(TotalDeaths = sum(COVID.19.Deaths, na.rm = TRUE)) %>%
+  arrange(desc(TotalDeaths)) %>%
+  head(5)
+
+ggplot(top_conditions, aes(x = reorder(Condition, TotalDeaths), y = TotalDeaths)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Top Conditions Contributing to COVID-19 Deaths",
+       x = "Condition",
+       y = "Total Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+Our analysis has led to some crucial insights into the health conditions most associated with COVID-19 deaths:
+
+**Influenza and Pneumonia:** Topping the list, influenza and pneumonia have shown to be the most significant contributors to COVID-19 fatalities. This finding underscores the severe impact these respiratory conditions can have when combined with COVID-19.
+
+- **Cardiac arrest:** A broad category encompassing various health issues, this group represents a significant portion of COVID-19 related deaths, highlighting the complexity and multifaceted nature of the pandemic's impact.
+
+- **Respiratory Failure:** Not far behind, respiratory failure emerges as a critical factor in COVID-19 deaths, indicating the severe respiratory complications caused by the virus.
+
+- **Hypertensive Diseases:** High blood pressure and related conditions have also been major contributors, pointing towards the increased risks faced by individuals with cardiovascular issues.
+
+- **Diabetes:** This condition rounds out our top five, emphasizing the heightened risks for COVID-19 patients with diabetes.
+
+These insights are pivotal in understanding the COVID-19 pandemic's broader health implications and can guide public health strategies in managing and mitigating the risks for those with pre-existing conditions.
+
+
+```{r, echo=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(maps)
+
+file_path <- "/Users/LydiaWangLi/Desktop/PM566R/covid19.csv"
+dat <- fread(file_path) %>%
+  na.omit() %>%
+  unique() %>%
+  mutate(`COVID-19 Deaths` = coalesce(`COVID-19 Deaths`, 0)) %>%
+  filter(`COVID-19 Deaths` > 0, Condition != "COVID-19", Condition != "All other conditions and causes (residual)")
+
+state_centers <- data.frame(
+  State = toupper(state.name),
+  longitude = state.center$x,
+  latitude = state.center$y
+)
+
+dat <- dat %>%
+  mutate(State = toupper(State))
+
+
+dat <- left_join(dat, state_centers, by = "State")
+
+
+deaths_per_state <- dat %>%
+  group_by(State) %>%
+  summarise(
+    TotalDeaths = sum(`COVID-19 Deaths`, na.rm = TRUE),
+    longitude = first(longitude),
+    latitude = first(latitude)
+  ) %>%
+  ungroup() %>%
+  mutate(hover_text = paste("State:", State, "\nTotal Deaths:", TotalDeaths))
+
+us_states <- map_data("state")
+
+map_deaths <- ggplot(data = us_states, aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = NA) +
+  coord_fixed(1.3)
+
+
+plotly_map_deaths <- ggplotly(map_deaths) %>%
+  add_trace(
+    data = deaths_per_state,
+    x = ~longitude, 
+    y = ~latitude, 
+    type = 'scatter',
+    mode = 'markers',
+    marker = list(opacity = 0),
+    text = ~hover_text,
+    hoverinfo = 'text'
+  ) %>%
+  add_trace(
+    data = state_centers,
+    x = ~longitude, 
+    y = ~latitude, 
+    type = 'scatter',
+    mode = 'text',
+    text = ~State,
+    hoverinfo = 'none',
+    textposition = 'middle center',
+    textfont = list(size = 3, color = 'red')
+  ) %>%
+  layout(hoverlabel = list(bgcolor = "white"))
+
+plotly_map_deaths
+
+```
+This interactive map shows the total number of deaths per state.
+```{r}
+
+```
+
+```{r, echo=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(maps)
+
+
+file_path <- "/Users/LydiaWangLi/Desktop/PM566R/covid19.csv"
+dat <- fread(file_path) %>%
+  na.omit() %>%
+  unique() %>%
+  mutate(`COVID-19 Deaths` = coalesce(`COVID-19 Deaths`, 0)) %>%
+  filter(`COVID-19 Deaths` > 0, Condition != "COVID-19", Condition != "All other conditions and causes (residual)")
+
+state_centers <- data.frame(
+  State = toupper(state.name),
+  longitude = state.center$x,
+  latitude = state.center$y
+)
+
+condition_counts <- dat %>%
+  mutate(State = toupper(State)) %>%
+  group_by(State, Condition) %>%
+  summarise(Count = n(), .groups = 'drop')
+
+
+condition_counts <- condition_counts %>%
+  left_join(state_centers, by = "State")
+
+
+state_top_condition <- condition_counts %>%
+  arrange(State, desc(Count)) %>%
+  group_by(State) %>%
+  slice(1) %>%
+  ungroup() %>%
+  mutate(hover_text = paste("State:", State, "\nCondition:", Condition, "\nCount:", Count))
+
+
+us_states <- map_data("state")
+
+
+base_map <- ggplot(data = us_states, aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = NA) +
+  coord_fixed(1.3)
+
+
+plotly_map_conditions <- ggplotly(base_map) %>%
+  add_trace(
+    data = state_top_condition,
+    x = ~longitude, 
+    y = ~latitude, 
+    type = 'scatter',
+    mode = 'markers',
+    marker = list(opacity = 0),
+    text = ~hover_text,
+    hoverinfo = 'text'
+  ) %>%
+  add_trace(
+    data = state_centers,
+    x = ~longitude, 
+    y = ~latitude, 
+    type = 'scatter',
+    mode = 'text',
+    text = ~State,
+    hoverinfo = 'none',
+    textposition = 'middle center',
+    textfont = list(size = 3, color = 'red')
+  ) %>%
+  layout(hoverlabel = list(bgcolor = "white"))
+
+
+plotly_map_conditions
+
+```
+
+This interactive map shows the most prevalent condition and the count per state.
+
+
+
+

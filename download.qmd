@@ -1,0 +1,8 @@
+---
+title: "Download Report & Resources"
+---
+
+The report could be downloaded here as PDF: https://github.com/lydiawangli/Final/blob/main/PM566%20Final%20Report.pdf
+
+The dataset could be found here: https://catalog.data.gov/dataset/conditions-contributing-to-deaths-involving-coronavirus-disease-2019-covid-19-by-age-group
+

@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "In this project, we delve into the multifaceted impacts of the COVID-19 pandemic, focusing on how it has affected various demographics and uncovering the underlying conditions that significantly contributed to COVID-19 related deaths. Our objective is to provide a comprehensive analysis of the data collected during the pandemic, shedding light on crucial trends and patterns that emerged. This analysis is not only vital for understanding the past and present implications of the pandemic but also for preparing and strategizing for future public health challenges.\nThrough rigorous data exploration, we aim to answer key questions such as which age groups were most affected and which pre-existing health conditions posed higher risks. Our analysis leverages a dataset that includes detailed information on COVID-19 deaths, underlying health conditions, and demographic data.\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:data.table':\n\n    between, first, last\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\n[1] 0.05009731\n\n\n[1] 621000     14\n\n\n[1] 353836      4\n\n\n\n\n\nOur analysis has led to some crucial insights into the health conditions most associated with COVID-19 deaths:\nInfluenza and Pneumonia: Topping the list, influenza and pneumonia have shown to be the most significant contributors to COVID-19 fatalities. This finding underscores the severe impact these respiratory conditions can have when combined with COVID-19.\n\nCardiac arrest: A broad category encompassing various health issues, this group represents a significant portion of COVID-19 related deaths, highlighting the complexity and multifaceted nature of the pandemic’s impact.\nRespiratory Failure: Not far behind, respiratory failure emerges as a critical factor in COVID-19 deaths, indicating the severe respiratory complications caused by the virus.\nHypertensive Diseases: High blood pressure and related conditions have also been major contributors, pointing towards the increased risks faced by individuals with cardiovascular issues.\nDiabetes: This condition rounds out our top five, emphasizing the heightened risks for COVID-19 patients with diabetes.\n\nThese insights are pivotal in understanding the COVID-19 pandemic’s broader health implications and can guide public health strategies in managing and mitigating the risks for those with pre-existing conditions.\n\n\n\nAttaching package: 'plotly'\n\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\n\nThe following object is masked from 'package:stats':\n\n    filter\n\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\nWarning: Ignoring 4 observations\n\n\n\n\n\n\nThis interactive map shows the total number of deaths per state.\n\n\nWarning: Ignoring 4 observations\n\n\n\n\n\n\nThis interactive map shows the most prevalent condition and the count per state."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Download Report & Resources",
+    "section": "",
+    "text": "[1] 2"
+  },
+  {
+    "objectID": "Final.html",
+    "href": "Final.html",
+    "title": "Data Analysis & Insights",
+    "section": "",
+    "text": "[1] 2"
+  },
+  {
+    "objectID": "data analysis.html",
+    "href": "data analysis.html",
+    "title": "Data Analysis & Insights",
+    "section": "",
+    "text": "In this section, we dive into the specifics of our data analysis process, exploring how various underlying health conditions have contributed to COVID-19 deaths. Our approach is grounded in rigorous data examination and aims to provide a comprehensive understanding of the pandemic’s impact through the lens of existing health conditions.\nThe dataset used for this analysis was obtained from Data.gov, published by the Centers for Disease Control and Prevention (CDC). It comprises 621,000 rows and 14 columns, offering detailed insights into various aspects of COVID-19 related fatalities. After an initial assessment, we found approximately 5.1% missing values, predominantly in the ‘Year’, ‘Month’, and ‘Flag’ columns. To ensure the integrity of our analysis, rows with missing values were omitted. We then focused on the most relevant variables for our study, filtering the dataset to include records specifically related to COVID-19 deaths. Tools from the data.table and dplyr packages in R were utilized for data manipulation, including removing duplicates, selecting specific columns, and filtering rows.\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:data.table':\n\n    between, first, last\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union"
+  },
+  {
+    "objectID": "download.html",
+    "href": "download.html",
+    "title": "Download Report & Resources",
+    "section": "",
+    "text": "The report could be downloaded here as PDF: https://github.com/lydiawangli/Final/blob/main/PM566%20Final%20Report.pdf\nThe dataset could be found here: https://catalog.data.gov/dataset/conditions-contributing-to-deaths-involving-coronavirus-disease-2019-covid-19-by-age-group"
+  },
+  {
+    "objectID": "data/README copy.html",
+    "href": "data/README copy.html",
+    "title": "Final Project: Impact of COVID-19 Across Demographics",
+    "section": "",
+    "text": "Final Project: Impact of COVID-19 Across Demographics\n\n\nDownload final report as PDF: https://github.com/lydiawangli/Final/blob/main/PM566%20Final%20Report.pdf\n\n\nThis project aims to analyze the impact of COVID-19 across different demographics, focusing on the United States. It seeks to uncover correlations between pre-existing health conditions and COVID-19 related fatalities. The analysis utilizes data from the Centers for Disease Control and Prevention (CDC), which includes detailed records on COVID-19 fatalities, demographic data, and comorbid conditions.\n\n\nThe dataset could be downloaded from https://catalog.data.gov/dataset/conditions-contributing-to-deaths-involving-coronavirus-disease-2019-covid-19-by-age-group or found in the folder called “data”."
+  }
+]

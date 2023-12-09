@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "PM566 project"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: data analysis.qmd
+        text: Data Analysis & Insights
+      - href: download.qmd
+        text: Download Report & Resources
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
+
